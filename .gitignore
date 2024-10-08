@@ -4,3 +4,4 @@
 build*
 *.exe
 *.dll
+compile_commands.json
