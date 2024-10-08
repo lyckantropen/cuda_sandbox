@@ -1,0 +1,2 @@
+add_executable(vector_addition vector_addition.cu)
+target_compile_features(vector_addition PUBLIC cxx_std_20)

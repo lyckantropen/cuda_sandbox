@@ -1,0 +1,2 @@
+add_executable(simplify_path simplify_path.cpp)
+target_compile_features(simplify_path PUBLIC cxx_std_20)
