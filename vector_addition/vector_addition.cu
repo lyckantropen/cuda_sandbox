@@ -30,13 +30,11 @@ int main() {
   add_vec<<<N_BLOCKS, N_THREADS>>>(dev_a, dev_b, dev_res);
   cudaDeviceSynchronize();
 
-  cudaMemcpy(hst_res.data(), dev_res, N * sizeof(double),
-             cudaMemcpyDeviceToHost);
+  cudaMemcpy(hst_res.data(), dev_res, N * sizeof(double), cudaMemcpyDeviceToHost);
 
   // validate
   auto val_res = std::valarray<double>(hst_res.data(), N);
-  auto val_ab = std::valarray<double>(hst_a.data(), N) +
-                std::valarray<double>(hst_b.data(), N);
+  auto val_ab = std::valarray<double>(hst_a.data(), N) + std::valarray<double>(hst_b.data(), N);
 
   std::cout << std::ranges::equal(val_res, val_ab) << std::endl;
 

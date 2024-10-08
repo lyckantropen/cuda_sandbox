@@ -12,8 +12,7 @@ constexpr size_t BLOCKS = 512;
 constexpr size_t N = 32;
 using namespace std::chrono_literals;
 
-xt::xtensor<double, 2> matmul(const xt::xtensor<double, 2> &a,
-                              const xt::xtensor<double, 2> &b);
+xt::xtensor<double, 2> matmul(const xt::xtensor<double, 2> &a, const xt::xtensor<double, 2> &b);
 
 __global__ void kern_matmul(double *a, double *b, double *res) {
   int offset = blockIdx.x * N * N;
@@ -61,10 +60,8 @@ int main() {
     std::generate(hst_a[i].begin(), hst_a[i].end(), [&]() { return dis(gen); });
     std::generate(hst_b[i].begin(), hst_b[i].end(), [&]() { return dis(gen); });
 
-    cudaMemcpy(dev_a + i * N * N, hst_a[i].data(), N * N * sizeof(double),
-               cudaMemcpyHostToDevice);
-    cudaMemcpy(dev_b + i * N * N, hst_b[i].data(), N * N * sizeof(double),
-               cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_a + i * N * N, hst_a[i].data(), N * N * sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_b + i * N * N, hst_b[i].data(), N * N * sizeof(double), cudaMemcpyHostToDevice);
   }
 
   auto start = std::chrono::high_resolution_clock::now();
@@ -76,18 +73,13 @@ int main() {
   }
 
   auto stop = std::chrono::high_resolution_clock::now();
-  auto duration =
-      std::chrono::duration_cast<std::chrono::microseconds>(stop - start)
-          .count() /
-      N_ITER;
-  std::cout << "Time taken by function: " << duration << " microseconds"
-            << std::endl;
+  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() / N_ITER;
+  std::cout << "Time taken by function: " << duration << " microseconds" << std::endl;
 
   // validate
   try {
     for (size_t i = 0; i < BLOCKS; ++i) {
-      cudaMemcpy(hst_res[i].data(), dev_res + i * N * N, N * N * sizeof(double),
-                 cudaMemcpyDeviceToHost);
+      cudaMemcpy(hst_res[i].data(), dev_res + i * N * N, N * N * sizeof(double), cudaMemcpyDeviceToHost);
       auto val_res = xt::adapt(hst_res[i], {N, N});
       auto val_a = xt::adapt(hst_a[i], {N, N});
       auto val_b = xt::adapt(hst_b[i], {N, N});
