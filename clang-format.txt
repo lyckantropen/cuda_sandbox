@@ -1,0 +1,9 @@
+﻿---
+BasedOnStyle: Microsoft
+AlignAfterOpenBracket: Align
+BreakBeforeBraces: Attach
+BreakConstructorInitializers: BeforeComma
+ColumnLimit: '160'
+IndentWidth: '2'
+
+...
