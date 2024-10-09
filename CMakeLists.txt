@@ -31,6 +31,7 @@ subdirs(vector_addition)
 subdirs(simplify_path)
 subdirs(matrix_multiplication)
 subdirs(histogram)
+subdirs(reduce)
 
 if (PROJECT_IS_TOP_LEVEL)
     # Create symlink to compile_commands.json for IDE to pick it up
