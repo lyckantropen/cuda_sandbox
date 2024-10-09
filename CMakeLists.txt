@@ -1,4 +1,9 @@
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
+
+if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+  set(CMAKE_CUDA_ARCHITECTURES 70)
+endif()
+
 project(cuda_sandbox LANGUAGES CXX CUDA)
 
 # download xtl with FetchContent
@@ -11,7 +16,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(xtl)
 
 # download xtensor with FetchContent
-include(FetchContent)
 FetchContent_Declare(
   xtensor
   GIT_REPOSITORY git@github.com:xtensor-stack/xtensor.git
@@ -19,10 +23,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(xtensor)
 
+add_library(cuda_proxy INTERFACE)
+target_compile_features(cuda_proxy INTERFACE cxx_std_20)
+target_link_libraries(cuda_proxy INTERFACE xtl xtensor)
+
 subdirs(vector_addition)
 subdirs(simplify_path)
 subdirs(matrix_multiplication)
-
+subdirs(histogram)
 
 if (PROJECT_IS_TOP_LEVEL)
     # Create symlink to compile_commands.json for IDE to pick it up

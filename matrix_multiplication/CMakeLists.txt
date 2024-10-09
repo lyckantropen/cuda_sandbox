@@ -1,3 +1,2 @@
 add_executable(matrix_multiplication matrix_multiplication.cu matmul.cpp)
-target_compile_features(matrix_multiplication PUBLIC cxx_std_20)
-target_link_libraries(matrix_multiplication xtl xtensor)
+target_link_libraries(matrix_multiplication cuda_proxy)

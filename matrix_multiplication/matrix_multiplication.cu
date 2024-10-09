@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <chrono>
+#include <cuda/barrier>
 #include <iostream>
 #include <random>
 #include <stdexcept>
@@ -18,13 +19,17 @@ __global__ void kern_matmul(double *a, double *b, double *res) {
   int offset = blockIdx.x * N * N;
   int row = threadIdx.y;
   int col = threadIdx.x;
+
   if (row < N && col < N) {
+    // cuda::barrier<cuda::thread_scope_block> block(N*N);
+
     __shared__ float a_shared[N][N + 1];
     __shared__ float b_shared[N][N + 1];
 
     a_shared[row][col] = a[offset + row * N + col];
     b_shared[row][col] = b[offset + row * N + col];
 
+    // block.arrive_and_wait();
     __syncthreads();
 
     float sum = 0.0;
@@ -34,12 +39,12 @@ __global__ void kern_matmul(double *a, double *b, double *res) {
 
     res[offset + row * N + col] = sum;
 
+    // block.arrive_and_wait();
     __syncthreads();
   }
 }
 
 int main() {
-
   auto hst_a = std::array<std::vector<double>, BLOCKS>{};
   auto hst_b = std::array<std::vector<double>, BLOCKS>{};
   auto hst_res = std::array<std::vector<double>, BLOCKS>{};
