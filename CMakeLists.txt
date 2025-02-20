@@ -28,7 +28,6 @@ target_compile_features(cuda_proxy INTERFACE cxx_std_20)
 target_link_libraries(cuda_proxy INTERFACE xtl xtensor)
 
 subdirs(vector_addition)
-subdirs(simplify_path)
 subdirs(matrix_multiplication)
 subdirs(histogram)
 subdirs(reduce)
